@@ -3,8 +3,14 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import os
 
-archivo_simulacion = "salida_simulacion.txt"
-archivo_obstaculos = "obstaculos_simulacion.txt"
+archivo_simulacion = "Resultados/salida_simulacion.txt"
+archivo_obstaculos = "Resultados/obstaculos_simulacion.txt"
+
+if not os.path.exists(archivo_simulacion):
+    archivo_simulacion = "salida_simulacion.txt"
+
+if not os.path.exists(archivo_obstaculos):
+    archivo_obstaculos = "obstaculos_simulacion.txt"
 
 if not os.path.exists(archivo_simulacion):
     print("No se encontro salida_simulacion.txt. Ejecuta primero el programa C++.")
