@@ -1,0 +1,10 @@
+*.exe
+*.o
+*.obj
+*.user
+*.pro.user
+build/
+build-*/
+salida_simulacion.txt
+obstaculos_simulacion.txt
+__pycache__/
