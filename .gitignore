@@ -5,6 +5,10 @@
 *.pro.user
 build/
 build-*/
+debug/
+release/
+.qtcreator/
+Resultados/
 salida_simulacion.txt
 obstaculos_simulacion.txt
 __pycache__/
