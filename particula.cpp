@@ -1,10 +1,7 @@
 #include "particula.h"
 
-#include <cmath>
-#include <sstream>
-
 Particula::Particula()
-    : id(0), pos(), vel(), masa(1.0), radio(1.0), activa(true) {}
+    : id(0), pos(), vel(), masa(1.0), radio(1.0), activa(false) {}
 
 Particula::Particula(int id, const Vector2D& posicion, const Vector2D& velocidad,
                      double masa, double radio)
@@ -17,36 +14,25 @@ void Particula::actualizar(double dt) {
     pos += vel * dt;
 }
 
-bool Particula::colisionaConPared(double ancho, double alto) const {
+bool Particula::resolverColisionLimites(double ancho, double alto) {
     if (!activa) {
         return false;
     }
-    return (pos.x - radio <= 0.0 || pos.x + radio >= ancho ||
-            pos.y - radio <= 0.0 || pos.y + radio >= alto);
-}
 
-std::string Particula::resolverColisionPared(double ancho, double alto) {
-    if (!activa) {
-        return "";
-    }
-
-    std::ostringstream evento;
-    bool huboColision = false;
+    bool colision = false;
 
     if (pos.x - radio < 0.0) {
         pos.x = radio;
         if (vel.x < 0.0) {
             vel.x *= -1.0;
         }
-        evento << "pared_izquierda";
-        huboColision = true;
+        colision = true;
     } else if (pos.x + radio > ancho) {
         pos.x = ancho - radio;
         if (vel.x > 0.0) {
             vel.x *= -1.0;
         }
-        evento << "pared_derecha";
-        huboColision = true;
+        colision = true;
     }
 
     if (pos.y - radio < 0.0) {
@@ -54,33 +40,16 @@ std::string Particula::resolverColisionPared(double ancho, double alto) {
         if (vel.y < 0.0) {
             vel.y *= -1.0;
         }
-        if (huboColision) {
-            evento << "|";
-        }
-        evento << "pared_superior";
-        huboColision = true;
+        colision = true;
     } else if (pos.y + radio > alto) {
         pos.y = alto - radio;
         if (vel.y > 0.0) {
             vel.y *= -1.0;
         }
-        if (huboColision) {
-            evento << "|";
-        }
-        evento << "pared_inferior";
-        huboColision = true;
+        colision = true;
     }
 
-    return evento.str();
-}
-
-bool Particula::colisionaConParticula(const Particula& otra) const {
-    if (!activa || !otra.activa || id == otra.id) {
-        return false;
-    }
-    const double distancia2 = (pos - otra.pos).magnitudCuadrada();
-    const double radios = radio + otra.radio;
-    return distancia2 <= radios * radios;
+    return colision;
 }
 
 int Particula::obtenerId() const {
@@ -105,6 +74,10 @@ double Particula::obtenerRadio() const {
 
 bool Particula::estaActiva() const {
     return activa;
+}
+
+void Particula::asignarId(int nuevoId) {
+    id = nuevoId;
 }
 
 void Particula::asignarPosicion(const Vector2D& nuevaPosicion) {
